@@ -1,0 +1,24 @@
+{
+	"node": "n8n-nodes-base.browserless",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Miscellaneous"],
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://docs.browserless.io"
+			}
+		]
+	},
+	"alias": [
+		"browser",
+		"headless",
+		"scrape",
+		"screenshot",
+		"pdf",
+		"crawl",
+		"puppeteer",
+		"chromium",
+		"web scraping"
+	]
+}
