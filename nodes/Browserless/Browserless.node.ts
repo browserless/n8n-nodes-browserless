@@ -8,8 +8,6 @@ import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
 import { getUrlField, getWaitOptions } from './shared/descriptions';
 
-import { contentFields } from './operations/content/description';
-import { scrapeFields } from './operations/scrape/description';
 import { smartScrapeFields } from './operations/smartScrape/description';
 import { screenshotFields } from './operations/screenshot/description';
 import { pdfFields } from './operations/pdf/description';
@@ -18,12 +16,9 @@ import { mapFields } from './operations/map/description';
 import { functionFields } from './operations/function/description';
 import { downloadFields } from './operations/download/description';
 import { exportFields } from './operations/export/description';
-import { unblockFields } from './operations/unblock/description';
 import { performanceFields } from './operations/performance/description';
 import { crawlFields } from './operations/crawl/description';
 
-import { execute as executeContent } from './operations/content/execute';
-import { execute as executeScrape } from './operations/scrape/execute';
 import { execute as executeSmartScrape } from './operations/smartScrape/execute';
 import { execute as executeScreenshot } from './operations/screenshot/execute';
 import { execute as executePdf } from './operations/pdf/execute';
@@ -32,32 +27,25 @@ import { execute as executeMap } from './operations/map/execute';
 import { execute as executeFunction } from './operations/function/execute';
 import { execute as executeDownload } from './operations/download/execute';
 import { execute as executeExport } from './operations/export/execute';
-import { execute as executeUnblock } from './operations/unblock/execute';
 import { execute as executePerformance } from './operations/performance/execute';
 import { execute as executeCrawl } from './operations/crawl/execute';
 
 // Operations that accept a URL parameter
 const URL_OPERATIONS = [
-	'getContent',
-	'scrape',
 	'smartScrape',
 	'screenshot',
 	'pdf',
 	'mapUrls',
 	'exportContent',
-	'unblock',
 	'performanceAudit',
 	'crawl',
 ];
 
 // Operations that accept the shared wait/navigation options
 const WAIT_OPERATIONS = [
-	'getContent',
-	'scrape',
 	'smartScrape',
 	'screenshot',
 	'pdf',
-	'unblock',
 	'crawl',
 ];
 
@@ -108,12 +96,6 @@ export class Browserless implements INodeType {
 						action: 'Export page content',
 					},
 					{
-						name: 'Get Content',
-						value: 'getContent',
-						description: 'Get the fully rendered HTML of a page',
-						action: 'Get page content',
-					},
-					{
 						name: 'Map URLs',
 						value: 'mapUrls',
 						description: 'Discover URLs on a site or within its sitemap',
@@ -138,12 +120,6 @@ export class Browserless implements INodeType {
 						action: 'Run a custom function',
 					},
 					{
-						name: 'Scrape',
-						value: 'scrape',
-						description: 'Extract structured data from a page using CSS selectors',
-						action: 'Scrape structured data',
-					},
-					{
 						name: 'Screenshot',
 						value: 'screenshot',
 						description: 'Capture a screenshot of a page as PNG, JPEG, or WebP',
@@ -162,14 +138,8 @@ export class Browserless implements INodeType {
 							'Scrape a page with automatic fallbacks for blocked or JS-heavy sites',
 						action: 'Smart scrape a page',
 					},
-					{
-						name: 'Unblock',
-						value: 'unblock',
-						description: 'Bypass CAPTCHAs and bot detection to access a page',
-						action: 'Unblock a page',
-					},
 				],
-				default: 'getContent',
+				default: 'smartScrape',
 			},
 
 			// Shared URL field for operations that need it
@@ -179,8 +149,6 @@ export class Browserless implements INodeType {
 			getWaitOptions(WAIT_OPERATIONS),
 
 			// Operation-specific fields
-			...contentFields,
-			...scrapeFields,
 			...smartScrapeFields,
 			...screenshotFields,
 			...pdfFields,
@@ -189,7 +157,6 @@ export class Browserless implements INodeType {
 			...functionFields,
 			...downloadFields,
 			...exportFields,
-			...unblockFields,
 			...performanceFields,
 			...crawlFields,
 		],
@@ -206,12 +173,6 @@ export class Browserless implements INodeType {
 				let result: INodeExecutionData[];
 
 				switch (operation) {
-					case 'getContent':
-						result = await executeContent.call(this, i);
-						break;
-					case 'scrape':
-						result = await executeScrape.call(this, i);
-						break;
 					case 'smartScrape':
 						result = await executeSmartScrape.call(this, i);
 						break;
@@ -235,9 +196,6 @@ export class Browserless implements INodeType {
 						break;
 					case 'exportContent':
 						result = await executeExport.call(this, i);
-						break;
-					case 'unblock':
-						result = await executeUnblock.call(this, i);
 						break;
 					case 'performanceAudit':
 						result = await executePerformance.call(this, i);
