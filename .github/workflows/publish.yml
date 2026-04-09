@@ -31,6 +31,12 @@ jobs:
         run: npm run build
 
       - name: Publish with provenance
-        run: npm publish --provenance --access public --ignore-scripts
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if echo "$VERSION" | grep -q '-'; then
+            npm publish --provenance --access public --ignore-scripts --tag next
+          else
+            npm publish --provenance --access public --ignore-scripts
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
