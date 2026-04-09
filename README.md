@@ -1,4 +1,4 @@
-# n8n-nodes-browserless-rest
+# n8n-nodes-browserless-api
 
 This is an n8n community node for [Browserless](https://browserless.io) — a headless browser API service for web scraping, screenshots, PDF generation, and browser automation.
 
