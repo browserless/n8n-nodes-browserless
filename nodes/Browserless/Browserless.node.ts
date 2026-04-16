@@ -3,8 +3,9 @@ import type {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	JsonObject,
 } from 'n8n-workflow';
-import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
+import { NodeApiError, NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
 import { getUrlField, getWaitOptions } from './shared/descriptions';
 
@@ -218,6 +219,10 @@ export class Browserless implements INodeType {
 						pairedItem: { item: i },
 					});
 					continue;
+				}
+
+				if ((error as { statusCode?: number }).statusCode !== undefined) {
+					throw new NodeApiError(this.getNode(), error as JsonObject, { itemIndex: i });
 				}
 
 				throw new NodeOperationError(this.getNode(), error as Error, { itemIndex: i });
